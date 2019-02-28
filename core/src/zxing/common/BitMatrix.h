@@ -59,13 +59,14 @@ public:
     int offset = y * rowSize + (x >> logBits);
     return ((((unsigned)bits[offset]) >> (x & bitsMask)) & 1) != 0;
   }
-
   void set(int x, int y) {
     int offset = y * rowSize + (x >> logBits);
     bits[offset] |= 1 << (x & bitsMask);
   }
-
   void flip(int x, int y);
+  void flip(size_t x, size_t y)
+  {	  flip(int(x), int(y));
+  }
   void clear();
   void setRegion(int left, int top, int width, int height);
   Ref<BitArray> getRow(int y, Ref<BitArray> row);

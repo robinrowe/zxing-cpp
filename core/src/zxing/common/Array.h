@@ -33,6 +33,9 @@ public:
   std::vector<T> values_;
   Array() {}
   Array(int n) :
+	  Counted(), values_(n, T()) {
+  }
+  Array(size_t n) :
       Counted(), values_(n, T()) {
   }
   Array(T const* ts, int n) :
@@ -70,7 +73,7 @@ public:
     return values_[i];
   }
   int size() const {
-    return values_.size();
+    return int(values_.size());
   }
   bool empty() const {
     return values_.size() == 0;
@@ -93,6 +96,10 @@ public:
   explicit ArrayRef(int n) :
       array_(0) {
     reset(new Array<T> (n));
+  }
+  explicit ArrayRef(size_t n) :
+	  array_(0) {
+	  reset(new Array<T>(n));
   }
   ArrayRef(T *ts, int n) :
       array_(0) {

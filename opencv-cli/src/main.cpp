@@ -39,6 +39,12 @@ using namespace zxing;
 using namespace zxing::qrcode;
 using namespace cv;
 
+enum
+{	CV_CAP_PROP_FRAME_WIDTH = 3,
+	CV_CAP_PROP_FRAME_HEIGHT = 4,
+	CV_BGR2GRAY = 6
+};
+
 void printUsage(char** argv) {
 
     // Print usage
@@ -49,7 +55,7 @@ void printUsage(char** argv) {
 }
 
 Point toCvPoint(Ref<ResultPoint> resultPoint) {
-    return Point(resultPoint->getX(), resultPoint->getY());
+    return Point(int(resultPoint->getX()), int(resultPoint->getY()));
 }
 
 int main(int argc, char** argv) {

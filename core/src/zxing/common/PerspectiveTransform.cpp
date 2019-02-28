@@ -87,8 +87,8 @@ Ref<PerspectiveTransform> PerspectiveTransform::times(Ref<PerspectiveTransform> 
 }
 
 void PerspectiveTransform::transformPoints(vector<float> &points) {
-  int max = points.size();
-  for (int i = 0; i < max; i += 2) {
+  size_t max = points.size();
+  for (size_t i = 0; i < max; i += 2) {
     float x = points[i];
     float y = points[i + 1];
     float denominator = a13 * x + a23 * y + a33;

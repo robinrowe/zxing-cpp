@@ -726,7 +726,7 @@ static void sort_coins(Coin* data, size_t amount)
   }
 }
 
-static unsigned append_symbol_coins(Coin* coins, const unsigned* frequencies, unsigned numcodes, size_t sum)
+static unsigned append_symbol_coins(Coin* coins, const unsigned* frequencies, size_t numcodes, size_t sum)
 {
   unsigned i;
   unsigned j = 0; /*index of present symbols*/
@@ -750,8 +750,8 @@ unsigned lodepng_huffman_code_lengths(unsigned* lengths, const unsigned* frequen
   unsigned error = 0;
   Coin* coins; /*the coins of the currently calculated row*/
   Coin* prev_row; /*the previous row of coins*/
-  unsigned numcoins;
-  unsigned coinmem;
+  size_t numcoins;
+  size_t coinmem;
 
   if(numcodes == 0) return 80; /*error: a tree of 0 symbols is not supposed to be made*/
 
@@ -800,15 +800,15 @@ unsigned lodepng_huffman_code_lengths(unsigned* lengths, const unsigned* frequen
     init_coins(prev_row, coinmem);
 
     /*first row, lowest denominator*/
-    error = append_symbol_coins(coins, frequencies, numcodes, sum);
+    error = append_symbol_coins(coins, frequencies, (unsigned) numcodes, sum);
     numcoins = numpresent;
     sort_coins(coins, numcoins);
     if(!error)
     {
-      unsigned numprev = 0;
+      size_t numprev = 0;
       for(j = 1; j <= maxbitlen && !error; j++) /*each of the remaining rows*/
       {
-        unsigned tempnum;
+        size_t tempnum;
         Coin* tempcoins;
         /*swap prev_row and coins, and their amounts*/
         tempcoins = prev_row; prev_row = coins; coins = tempcoins;
@@ -1453,19 +1453,20 @@ static unsigned encodeLZ77(uivector* out, Hash* hash,
 {
   unsigned short numzeros = 0;
   int usezeros = windowsize >= 8192; /*for small window size, the 'max chain length' optimization does a better job*/
-  unsigned pos, i, error = 0;
+  size_t pos, i;
+  unsigned error = 0;
   /*for large window lengths, assume the user wants no compression loss. Otherwise, max hash chain length speedup.*/
   unsigned maxchainlength = windowsize >= 8192 ? windowsize : windowsize / 8;
   unsigned maxlazymatch = windowsize >= 8192 ? MAX_SUPPORTED_DEFLATE_LENGTH : 64;
 
   if(!error)
   {
-    unsigned offset; /*the offset represents the distance in LZ77 terminology*/
-    unsigned length;
+    size_t offset; /*the offset represents the distance in LZ77 terminology*/
+    size_t length;
     unsigned lazy = 0;
-    unsigned lazylength = 0, lazyoffset = 0;
+    size_t lazylength = 0, lazyoffset = 0;
     unsigned hashval;
-    unsigned current_offset, current_length;
+    size_t current_offset, current_length;
     const unsigned char *lastptr, *foreptr, *backptr;
     unsigned short hashpos, prevpos;
 
@@ -3404,13 +3405,13 @@ unsigned lodepng_convert(unsigned char* out, const unsigned char* in,
 
   if(mode_out->colortype == LCT_PALETTE)
   {
-    size_t palsize = 1 << mode_out->bitdepth;
+    size_t palsize = 1ll << mode_out->bitdepth;
     if(mode_out->palettesize < palsize) palsize = mode_out->palettesize;
     color_tree_init(&tree);
     for(i = 0; i < palsize; i++)
     {
       unsigned char* p = &mode_out->palette[i * 4];
-      color_tree_add(&tree, p[0], p[1], p[2], p[3], i);
+      color_tree_add(&tree, p[0], p[1], p[2], p[3], int(i));
     }
   }
 
@@ -4354,7 +4355,7 @@ static unsigned readChunk_tEXt(LodePNGInfo* info, const unsigned char* data, siz
 
   while(!error) /*not really a while loop, only used to break on error*/
   {
-    unsigned length, string2_begin;
+    size_t length, string2_begin;
 
     length = 0;
     while(length < chunkLength && data[length] != 0) length++;
@@ -4395,7 +4396,7 @@ static unsigned readChunk_zTXt(LodePNGInfo* info, const LodePNGDecompressSetting
   unsigned error = 0;
   unsigned i;
 
-  unsigned length, string2_begin;
+  size_t length, string2_begin;
   char *key = 0;
   ucvector decoded;
 
@@ -4442,9 +4443,9 @@ static unsigned readChunk_iTXt(LodePNGInfo* info, const LodePNGDecompressSetting
                                const unsigned char* data, size_t chunkLength)
 {
   unsigned error = 0;
-  unsigned i;
+  size_t i;
 
-  unsigned length, begin, compressed;
+  size_t length, begin, compressed;
   char *key = 0, *langtag = 0, *transkey = 0;
   ucvector decoded;
   ucvector_init(&decoded);
@@ -5425,7 +5426,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
     {
       for(type = 0; type < 5; type++)
       {
-        unsigned testsize = attempt[type].size;
+        size_t testsize = attempt[type].size;
         /*if(testsize > 8) testsize /= 8;*/ /*it already works good enough by testing a part of the row*/
 
         filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, bytewidth, type);
@@ -5644,7 +5645,7 @@ static unsigned getPaletteTranslucency(const unsigned char* palette, size_t pale
     /*when key, no opaque RGB may have key's RGB*/
     else if(key && r == palette[i * 4 + 0] && g == palette[i * 4 + 1] && b == palette[i * 4 + 2]) return 2;
   }
-  return key;
+  return (int) key;
 }
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS

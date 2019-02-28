@@ -98,7 +98,7 @@ Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) {
 Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   std::vector<int>& theCounters (counters);
   { // Arrays.fill(counters, 0);
-    int size = theCounters.size();
+	size_t size = theCounters.size();
     theCounters.resize(0);
     theCounters.resize(size); }
   std::string& result (decodeRowResult);
@@ -120,7 +120,7 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     decodedChar = patternToChar(pattern);
     result.append(1, decodedChar);
     lastStart = nextStart;
-    for (int i = 0, end=theCounters.size(); i < end; i++) {
+    for (size_t i = 0, end=theCounters.size(); i < end; i++) {
       nextStart += theCounters[i];
     }
     // Read off white space
@@ -130,7 +130,7 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
 
     // Look for whitespace after pattern:
   int lastPatternSize = 0;
-  for (int i = 0, e = theCounters.size(); i < e; i++) {
+  for (size_t i = 0, e = theCounters.size(); i < e; i++) {
     lastPatternSize += theCounters[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
@@ -141,8 +141,8 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   }
 
   if (usingCheckDigit) {
-    int max = result.length() - 1;
-    int total = 0;
+    int max = int(result.length()) - 1;
+	size_t total = 0;
     for (int i = 0; i < max; i++) {
       total += checkdigit_string.find_first_of(decodeRowResult[i], 0);
     }
@@ -185,7 +185,7 @@ vector<int> Code39Reader::findAsteriskPattern(Ref<BitArray> row, vector<int>& co
   int counterPosition = 0;
   int patternStart = rowOffset;
   bool isWhite = false;
-  int patternLength = counters.size();
+  size_t patternLength = counters.size();
 
   for (int i = rowOffset; i < width; i++) {
     if (row->get(i) ^ isWhite) {
@@ -221,7 +221,7 @@ vector<int> Code39Reader::findAsteriskPattern(Ref<BitArray> row, vector<int>& co
 // For efficiency, returns -1 on failure. Not throwing here saved as many as
 // 700 exceptions per image when using some of our blackbox images.
 int Code39Reader::toNarrowWidePattern(vector<int>& counters){
-  int numCounters = counters.size();
+  size_t numCounters = counters.size();
   int maxNarrowCounter = 0;
   int wideCounters;
   do {
@@ -275,7 +275,7 @@ char Code39Reader::patternToChar(int pattern){
 }
 
 Ref<String> Code39Reader::decodeExtended(std::string encoded){
-  int length = encoded.length();
+  size_t length = encoded.length();
   std::string tmpDecoded;
   for (int i = 0; i < length; i++) {
     char c = encoded[i];

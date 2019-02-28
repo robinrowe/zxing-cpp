@@ -72,7 +72,7 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
 
   vector<int>& theCounters (counters);
   { // Arrays.fill(counters, 0);
-    int size = theCounters.size();
+	size_t size = theCounters.size();
     theCounters.resize(0);
     theCounters.resize(size); }
   string& result (decodeRowResult);
@@ -89,7 +89,7 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     decodedChar = patternToChar(pattern);
     result.append(1, decodedChar);
     lastStart = nextStart;
-    for(int i=0, e=theCounters.size(); i < e; ++i) {
+    for(size_t i=0, e=theCounters.size(); i < e; ++i) {
       nextStart += theCounters[i];
     }
     // Read off white space
@@ -99,7 +99,7 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
 
   // Look for whitespace after pattern:
   int lastPatternSize = 0;
-  for (int i = 0, e = theCounters.size(); i < e; i++) {
+  for (size_t i = 0, e = theCounters.size(); i < e; i++) {
     lastPatternSize += theCounters[i];
   }
   
@@ -140,14 +140,14 @@ Code93Reader::Range Code93Reader::findAsteriskPattern(Ref<BitArray> row)  {
   int rowOffset = row->getNextSet(0);
 
   { // Arrays.fill(counters, 0);
-    int size = counters.size();
+	size_t size = counters.size();
     counters.resize(0);
     counters.resize(size); }
   vector<int>& theCounters (counters);
 
   int patternStart = rowOffset;
   bool isWhite = false;
-  int patternLength = theCounters.size();
+  size_t patternLength = theCounters.size();
 
   int counterPosition = 0;
   for (int i = rowOffset; i < width; i++) {
@@ -176,9 +176,9 @@ Code93Reader::Range Code93Reader::findAsteriskPattern(Ref<BitArray> row)  {
 }
 
 int Code93Reader::toPattern(vector<int>& counters) {
-  int max = counters.size();
+  size_t max = counters.size();
   int sum = 0;
-  for(int i=0, e=counters.size(); i<e; ++i) {
+  for(size_t i=0, e=counters.size(); i<e; ++i) {
     sum += counters[i];
   }
   int pattern = 0;
@@ -208,7 +208,7 @@ char Code93Reader::patternToChar(int pattern)  {
 }
 
 Ref<String> Code93Reader::decodeExtended(string const& encoded)  {
-  int length = encoded.length();
+  size_t length = encoded.length();
   string decoded;
   for (int i = 0; i < length; i++) {
     char c = encoded[i];
@@ -277,7 +277,7 @@ Ref<String> Code93Reader::decodeExtended(string const& encoded)  {
 }
 
 void Code93Reader::checkChecksums(string const& result) {
-  int length = result.length();
+  int length = (int) result.length();
   checkOneChecksum(result, length - 2, 20);
   checkOneChecksum(result, length - 1, 15);
 }
@@ -286,7 +286,7 @@ void Code93Reader::checkOneChecksum(string const& result,
                                     int checkPosition,
                                     int weightMax) {
   int weight = 1;
-  int total = 0;
+  size_t total = 0;
   for (int i = checkPosition - 1; i >= 0; i--) {
     total += weight * ALPHABET_STRING.find_first_of(result[i]);
     if (++weight > weightMax) {
