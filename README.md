@@ -1,6 +1,38 @@
 # ZXing C++ Port
 
-This project forked from [ZXing-cpp](https://github.com/glassechidna/zxing-cpp) because it seems it is no longer maintained.
+ZXing is great at reading barcodes and QR codes. It is a library and has two console programs. Portable to Linux, Windows and MacOS. If you want a GUI, there's an example that comes with Qt.'
+
+./build/Release/zxing-cv.exe
+./build/Release/zxing.exe
+
+## Building using CMake
+
+    mkdir build
+    cd build
+	cmake .. -A x64 -DCMAKE_PREFIX_PATH=/code/opencv/build  
+
+Linux 
+
+    make 
+	
+Windows
+	
+	msbuild zxing.sln /property:Configuration=Release [Windows]
+
+Or, load into VisualStudio. Built with VS 2017.
+
+Switch between build modes by specifying:
+
+  -DCMAKE_BUILD_TYPE=Debug or
+  -DCMAKE_BUILD_TYPE=Release
+
+## OpenCV integration
+
+When build on a system where opencv is installed the open cv bridge classes and executable will be built too.
+
+## History
+
+This project forked from [ZXing-cpp](https://github.com/glassechidna/zxing-cpp) because it seems it is no longer maintained there.
 
 [![Build Status](https://travis-ci.org/glassechidna/zxing-cpp.svg?branch=master)](https://travis-ci.org/glassechidna/zxing-cpp)
 
@@ -19,20 +51,4 @@ Removal of build systems was done to minimise maintenance burden.
 
 If tests and XCode projects (other than those produced automatically be CMake) are desired, then another repo should be created and this repo referenced as a submodule. 
 
-# Building using CMake
-
-    mkdir build
-    cd build
-	cmake .. -A x64 -DCMAKE_PREFIX_PATH=/code/opencv/build  
-    make [Linux] or...
-	msbuild zxing.sln /property:Configuration=Release [Windows]
-  
-Switch between build modes by specifying:
-
-  -DCMAKE_BUILD_TYPE=Debug or
-  -DCMAKE_BUILD_TYPE=Release
-
-# OpenCV integration
-
-When build on a system where opencv is installed the open cv bridge classes and executable will be built too.
-
+-0-
