@@ -2,8 +2,8 @@
 
 ZXing is great at reading barcodes and QR codes. It is a library and has two console programs. Portable to Linux, Windows and MacOS. If you want a GUI, there's an example that comes with Qt.'
 
-./build/Release/zxing-cv.exe
-./build/Release/zxing.exe
+    ./build/Release/zxing-cv.exe
+    ./build/Release/zxing.exe
 
 ## Building using CMake
 
@@ -23,8 +23,8 @@ Or, load into VisualStudio. Built with VS 2017.
 
 Switch between build modes by specifying:
 
-  -DCMAKE_BUILD_TYPE=Debug or
-  -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_BUILD_TYPE=Debug or
+    -DCMAKE_BUILD_TYPE=Release
 
 ## OpenCV integration
 
