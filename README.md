@@ -1,6 +1,6 @@
 # ZXing C++ Port
 
-ZXing is great at reading barcodes and QR codes. It is a library and has two console programs. Portable to Linux, Windows and MacOS. If you want a GUI, there's an example that comes with Qt.'
+ZXing is great at reading barcodes and QR codes. It is a library and has two console programs. Portable to Linux, Windows and MacOS. If you want a GUI, there's an example that comes with Qt.
 
     ./build/Release/zxing-cv.exe
     ./build/Release/zxing.exe
@@ -17,7 +17,7 @@ Linux
 	
 Windows
 	
-	msbuild zxing.sln /property:Configuration=Release [Windows]
+	msbuild zxing.sln /property:Configuration=Release
 
 Or, load into VisualStudio. Built with VS 2017.
 
